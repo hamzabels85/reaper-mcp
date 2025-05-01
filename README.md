@@ -17,12 +17,16 @@ A comprehensive Model Context Protocol (MCP) server that enables AI agents to cr
 
 - REAPER DAW installed
 - Python 3.8+
-- ReaPy (Python bindings for REAPER)
-- MCP Server library
+- OSC support enabled in REAPER (for OSC mode)
+- ReaScript API enabled in REAPER (for ReaScript mode)
 
 ## Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/itsuzef/reaper-mcp.git
+cd reaper-mcp
+
 # Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -33,38 +37,99 @@ pip install -e .
 
 ## Usage
 
-1. Start REAPER
-2. Launch the MCP server:
-   ```bash
-   python -m reaper_mcp.server
-   ```
-3. Connect your AI client to the MCP server
+### Quick Start
 
-## Tools
+The easiest way to get started is to use the provided startup script:
 
-The server provides a comprehensive set of tools for AI-driven music production:
+```bash
+# Start REAPER first
+open /Applications/REAPER.app  # On macOS
+# or start REAPER manually on other platforms
 
-- Project management tools
-- Track and routing tools
-- MIDI composition tools
-- Audio recording and editing tools
-- Virtual instrument and effect tools
-- Mixing and automation tools
-- Mastering tools
-- Analysis and feedback tools
-
-## Configuration
-
-Configure the server by editing the `config.json` file:
-
-```json
-{
-  "reaper_path": "/path/to/reaper",
-  "default_project_directory": "/path/to/projects",
-  "vst_directories": ["/path/to/vsts"],
-  "sample_libraries": ["/path/to/samples"]
-}
+# Then start the MCP server
+./scripts/start_reaper_mcp_server.sh
 ```
+
+### Configuration
+
+By default, the server will use OSC mode, which is more reliable and doesn't require the ReaScript API to be working correctly. You can configure the server using command-line arguments:
+
+```bash
+# Start in OSC mode (default)
+./scripts/start_reaper_mcp_server.sh --mode=osc
+
+# Start in ReaScript mode
+./scripts/start_reaper_mcp_server.sh --mode=reapy
+
+# Configure OSC settings
+./scripts/start_reaper_mcp_server.sh --host=192.168.1.110 --send-port=8000 --receive-port=9000
+
+# Enable debug logging
+./scripts/start_reaper_mcp_server.sh --debug
+```
+
+### Setting up REAPER for OSC
+
+1. Open REAPER
+2. Go to Preferences > Control/OSC/web
+3. Click "Add" and select "OSC (Open Sound Control)"
+4. Configure the following settings:
+   - Device name: ReaperMCP
+   - Mode: Local port
+   - Local listen port: 8000
+   - Local IP: 127.0.0.1 (or your computer's IP address)
+   - Allow binding messages to REAPER actions and FX learn: Checked (optional)
+   - Outgoing max packet size: 1024
+   - Wait between packets: 10ms
+
+### Setting up REAPER for ReaScript
+
+1. Open REAPER
+2. Go to Preferences > Plug-ins > ReaScript
+3. Make sure "Enable Python for ReaScript" is checked
+4. Set the Python DLL/dylib path to your Python installation
+   - On macOS: `/opt/homebrew/Cellar/python@3.x/3.x.x/Frameworks/Python.framework/Versions/3.x/Python`
+   - On Windows: `C:\Path\to\Python\python3x.dll`
+5. Run the setup script:
+   ```bash
+   python scripts/setup_reaper_python.py
+   ```
+
+## Project Structure
+
+- `src/reaper_mcp/`: Main package directory
+  - `__main__.py`: Command-line interface
+  - `osc_server.py`: OSC-based server implementation
+  - `server.py`: ReaScript-based server implementation
+- `examples/`: Example scripts demonstrating usage
+- `scripts/`: Utility scripts for setup and running
+
+## MCP Tools
+
+The server provides the following MCP tools:
+
+- `create_project`: Creates a new REAPER project
+- `create_track`: Creates a new track in the current project
+- `list_tracks`: Lists all tracks in the current project
+- `add_midi_note`: Adds a MIDI note to a track
+- `get_project_info`: Gets information about the current project
+
+## Troubleshooting
+
+### ReaScript API Issues
+
+If you're experiencing issues with the ReaScript API, try using the OSC mode instead:
+
+```bash
+./scripts/start_reaper_mcp_server.sh --mode=osc
+```
+
+### OSC Communication Issues
+
+Make sure REAPER is configured correctly for OSC:
+1. Check that the OSC settings in REAPER match the server settings
+2. Verify that no firewall is blocking the communication
+3. Try using the local IP address (127.0.0.1) instead of a network IP
 
 ## License
 

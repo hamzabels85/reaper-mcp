@@ -15,11 +15,12 @@ dependencies = [
     "python-reapy>=0.10.0",
     "mcp-server>=0.1.0",
     "numpy>=1.20.0",
-    "librosa>=0.9.0",
+    "python-osc>=1.8.0",
 ]
 
 [project.scripts]
-reaper-mcp = "reaper_mcp.server:main"
+reaper-mcp = "reaper_mcp.__main__:main"
+reaper-osc-mcp = "reaper_mcp.osc_server:main"
 
 [project.optional-dependencies]
 dev = [
