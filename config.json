@@ -1,0 +1,11 @@
+{
+  "reaper_path": "/Applications/REAPER.app",
+  "default_project_directory": "/Users/youssefhemimy/Documents/REAPER Projects",
+  "vst_directories": ["/Library/Audio/Plug-Ins/VST", "/Library/Audio/Plug-Ins/VST3"],
+  "sample_libraries": ["/Volumes/ExtremeSSD/Soundbanks/SB_October"],
+  "default_tempo": 120.0,
+  "default_time_signature": "4/4",
+  "default_sample_rate": 48000,
+  "default_bit_depth": 24,
+  "default_audio_format": "wav"
+}
