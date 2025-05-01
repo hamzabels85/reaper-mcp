@@ -47,7 +47,19 @@ open /Applications/REAPER.app  # On macOS
 # or start REAPER manually on other platforms
 
 # Then start the MCP server
-./scripts/start_reaper_mcp_server.sh
+./scripts/start_reaper_mcp_server.sh  # On Unix/Mac
+```
+
+#### Windows Users
+
+For Windows users, use one of the provided Windows scripts:
+
+```cmd
+# Using Command Prompt (CMD)
+scripts\start_reaper_mcp_server.bat
+
+# Using PowerShell
+powershell -ExecutionPolicy Bypass -File scripts\start_reaper_mcp_server.ps1
 ```
 
 ### Configuration
@@ -56,16 +68,28 @@ By default, the server will use OSC mode, which is more reliable and doesn't req
 
 ```bash
 # Start in OSC mode (default)
-./scripts/start_reaper_mcp_server.sh --mode=osc
+./scripts/start_reaper_mcp_server.sh --mode=osc  # Unix/Mac
+scripts\start_reaper_mcp_server.bat --mode=osc   # Windows CMD
+powershell -File scripts\start_reaper_mcp_server.ps1 -mode osc  # Windows PowerShell
 
 # Start in ReaScript mode
-./scripts/start_reaper_mcp_server.sh --mode=reapy
+./scripts/start_reaper_mcp_server.sh --mode=reapy  # Unix/Mac
+scripts\start_reaper_mcp_server.bat --mode=reapy   # Windows CMD
+powershell -File scripts\start_reaper_mcp_server.ps1 -mode reapy  # Windows PowerShell
 
-# Configure OSC settings
+# Configure OSC settings (Unix/Mac)
 ./scripts/start_reaper_mcp_server.sh --host=192.168.1.110 --send-port=8000 --receive-port=9000
 
+# Configure OSC settings (Windows CMD)
+scripts\start_reaper_mcp_server.bat --host=192.168.1.110 --send-port=8000 --receive-port=9000
+
+# Configure OSC settings (Windows PowerShell)
+powershell -File scripts\start_reaper_mcp_server.ps1 -host "192.168.1.110" -sendPort 8000 -receivePort 9000
+
 # Enable debug logging
-./scripts/start_reaper_mcp_server.sh --debug
+./scripts/start_reaper_mcp_server.sh --debug  # Unix/Mac
+scripts\start_reaper_mcp_server.bat --debug   # Windows CMD
+powershell -File scripts\start_reaper_mcp_server.ps1 -debug  # Windows PowerShell
 ```
 
 ### Setting up REAPER for OSC
@@ -130,6 +154,29 @@ Make sure REAPER is configured correctly for OSC:
 1. Check that the OSC settings in REAPER match the server settings
 2. Verify that no firewall is blocking the communication
 3. Try using the local IP address (127.0.0.1) instead of a network IP
+
+### Windows-Specific Troubleshooting
+
+If you're having issues running the MCP server on Windows:
+
+1. **Script Execution Issues**:
+   - For PowerShell scripts, you may need to adjust the execution policy: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+   - Alternatively, use the `-ExecutionPolicy Bypass` flag as shown in the examples
+
+2. **Path Issues**:
+   - Ensure the REAPER path in the scripts matches your installation location
+   - Default is `C:\Program Files\REAPER\reaper.exe`, modify if needed
+
+3. **Virtual Environment**:
+   - If you created the venv with a different method, the activation script might be in a different location
+   - Try activating manually before running: `venv\Scripts\activate`
+
+4. **Firewall Blocking**:
+   - Windows Firewall may block OSC communication
+   - Add exceptions for Python and REAPER in Windows Firewall settings
+
+5. **Administrator Rights**:
+   - Try running the Command Prompt or PowerShell as Administrator if you encounter permission issues
 
 ## License
 
